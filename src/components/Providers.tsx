@@ -76,11 +76,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   // page has no schedule, so we set a fixed state (the deep-blue "cost" look
   // the section was designed in) and reset to cool when returning home.
   useEffect(() => {
-    if (pathname === "/water-policy") {
-      setEnv({ theme: 1, depletion: 0.88, heat: 0.72 });
-    } else {
-      setEnv({ theme: 0, depletion: 0, heat: 0 });
-    }
+    // Every route starts at the cool aqua baseline, matching the home page.
+    // On home the scroll schedule then migrates it; the content tabs stay cool
+    // (their footage is dimmed by a scrim in WavesBackground for legibility).
+    setEnv({ theme: 0, depletion: 0, heat: 0 });
     window.scrollTo(0, 0);
     requestAnimationFrame(() => ScrollTrigger.refresh());
   }, [pathname]);

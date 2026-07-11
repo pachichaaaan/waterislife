@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { gsap, ScrollTrigger, ensureGsap, EASE } from "@/lib/anim";
 import { prefersReducedMotion } from "@/lib/env";
 
@@ -8,6 +9,7 @@ export default function Collision() {
   const rootRef = useRef<HTMLDivElement>(null);
   const stmtRef = useRef<HTMLDivElement>(null);
   const sweepRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const root = rootRef.current;
@@ -126,7 +128,15 @@ export default function Collision() {
       {/* central statement */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-6">
         <div ref={stmtRef} className="max-w-3xl text-center">
-          <span className="scope-tag mb-6 block">COOLANT ⇄ LOAD</span>
+          <button
+            onClick={() => router.push("/water-policy")}
+            className="scope-tag pointer-events-auto mb-6 inline-flex items-center gap-2 rounded-full transition-colors"
+            style={{ border: "1px solid var(--line)", padding: "0.5rem 1.1rem", color: "var(--accent)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in oklab, var(--accent), transparent 86%)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          >
+            Water Policy →
+          </button>
           <div className="u-display" style={{ lineHeight: 1.02 }}>
             <span className="reveal-mask block overflow-hidden">
               <span className="c-line block" style={{ fontSize: "clamp(1.8rem, 5.5vw, 4rem)", color: "var(--text)" }}>

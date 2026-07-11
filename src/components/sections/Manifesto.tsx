@@ -101,7 +101,7 @@ export default function Manifesto() {
       <div ref={bandRef} className="relative flex min-h-[60vh] items-center overflow-hidden md:min-h-screen">
         <div
           ref={trackRef}
-          className="flex w-max flex-wrap items-center gap-x-[8vw] gap-y-6 px-6 md:flex-nowrap md:px-[10vw]"
+          className="flex flex-wrap items-center gap-x-[8vw] gap-y-6 px-6 md:w-max md:flex-nowrap md:px-[10vw]"
         >
           {WORDS.map((w, i) => (
             <div key={w} className="flex items-center gap-[8vw]">

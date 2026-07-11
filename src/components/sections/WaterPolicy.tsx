@@ -1,6 +1,6 @@
 "use client";
 
-import { useSplitReveal, useClipReveal } from "@/lib/useReveal";
+import { useScrollReveal, useSplitReveal, useClipReveal } from "@/lib/useReveal";
 
 /* A policy fact, set like the data-theatre cards but without a count-up. */
 function PolicyCard({
@@ -48,10 +48,11 @@ function PolicyCard({
 export default function WaterPolicy() {
   const headingRef = useSplitReveal<HTMLHeadingElement>({ type: "lines", start: "top 80%" });
   const quoteRef = useClipReveal<HTMLQuoteElement>({ start: "top 82%" });
-  const cardRef = useClipReveal<HTMLDivElement>({ start: "top 82%" });
+  const revealRef = useScrollReveal<HTMLElement>();
 
   return (
     <section
+      ref={revealRef}
       id="policy"
       aria-label="Water policy — Ontario, Toronto and Canada"
       className="relative z-10 px-6 py-[16vh] md:px-10"
@@ -65,7 +66,7 @@ export default function WaterPolicy() {
         >
           The rulebook predates the machines.
         </h2>
-        <p className="mt-6 max-w-2xl text-base leading-relaxed" style={{ color: "var(--muted)" }}>
+        <p data-reveal className="mt-6 max-w-2xl text-base leading-relaxed" style={{ color: "var(--muted)" }}>
           In Ontario, water is governed province-first: every large taking is
           licensed, one application at a time. But that framework was written
           before AI data centres became a category of water user — and closing
@@ -94,59 +95,29 @@ export default function WaterPolicy() {
           />
         </div>
 
-        {/* the researcher naming the gap */}
-        <div className="mt-14 grid items-stretch gap-8 md:grid-cols-[1.5fr_1fr]">
-          <blockquote
-            ref={quoteRef}
-            className="clip-media flex flex-col justify-center rounded-lg p-8 md:p-10"
-            style={{ border: "1px solid var(--line)", background: "var(--panel-fill)" }}
+        {/* the researcher's argument */}
+        <blockquote
+          ref={quoteRef}
+          className="clip-media mt-14 rounded-lg p-8 md:p-10"
+          style={{ border: "1px solid var(--line)", background: "var(--panel-fill)" }}
+        >
+          <p
+            className="u-display"
+            style={{ fontWeight: 500, fontSize: "clamp(1.4rem, 3.4vw, 2.4rem)", lineHeight: 1.14, color: "var(--text)" }}
           >
-            <p
-              className="u-display"
-              style={{ fontWeight: 500, fontSize: "clamp(1.4rem, 3.4vw, 2.4rem)", lineHeight: 1.14, color: "var(--text)" }}
-            >
-              &ldquo;Canadian freshwater policy cannot remain reactive in{" "}
-              <span style={{ color: "var(--accent)" }}>
-                the face of global, geopolitical and rapid technological change.
-              </span>
-              &rdquo;
-            </p>
-            <footer className="mt-6 u-mono text-[0.72rem] leading-relaxed" style={{ color: "var(--muted)" }}>
-              Michelle Jadormeo — 2025–26 Geoffrey F. Bruce Fellow in Canadian
-              Freshwater Policy, Toronto Metropolitan University
-            </footer>
-          </blockquote>
+            &ldquo;Canadian freshwater policy cannot remain reactive in{" "}
+            <span style={{ color: "var(--accent)" }}>
+              the face of global, geopolitical and rapid technological change.
+            </span>
+            &rdquo;
+          </p>
+          <footer className="mt-6 u-mono text-[0.72rem] leading-relaxed" style={{ color: "var(--muted)" }}>
+            Michelle Jadormeo — 2025–26 Geoffrey F. Bruce Fellow in Canadian
+            Freshwater Policy, Toronto Metropolitan University
+          </footer>
+        </blockquote>
 
-          <aside
-            ref={cardRef}
-            className="clip-media rounded-lg p-8"
-            style={{ border: "1px solid var(--line)" }}
-          >
-            <div className="scope-tag">THE RESEARCHER</div>
-            <h3 className="u-display mt-3" style={{ fontSize: "clamp(1.4rem, 3vw, 2rem)" }}>
-              Michelle Jadormeo
-            </h3>
-            <dl className="mt-6 space-y-4">
-              {[
-                ["Based", "Toronto Metropolitan University (MPPA)"],
-                ["Focus", "AI data centres & water use — policy gaps in Canada’s oversight"],
-                ["Method", "Comparative policy analysis of regulatory blind spots"],
-                ["Region", "The Great Lakes basin & urban centres near water"],
-              ].map(([k, v]) => (
-                <div key={k}>
-                  <dt className="u-mono text-[0.62rem] uppercase tracking-[0.2em]" style={{ color: "var(--accent)" }}>
-                    {k}
-                  </dt>
-                  <dd className="mt-1 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
-                    {v}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </aside>
-        </div>
-
-        <p className="mt-12 max-w-3xl text-base leading-relaxed" style={{ color: "var(--muted)" }}>
+        <p data-reveal className="mt-12 max-w-3xl text-base leading-relaxed" style={{ color: "var(--muted)" }}>
           Toronto and the data centres rising across the Great Lakes draw on the
           same basin. Jadormeo&rsquo;s work maps the{" "}
           <span style={{ color: "var(--accent)" }}>

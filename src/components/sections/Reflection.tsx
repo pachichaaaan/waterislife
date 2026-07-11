@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { gsap, ensureGsap, EASE } from "@/lib/anim";
 import { prefersReducedMotion, scrollToId, setEnv } from "@/lib/env";
 import { useEnvScrub } from "@/lib/useEnvScrub";
@@ -19,6 +20,7 @@ export default function Reflection() {
     { start: "top bottom", end: "bottom top" }
   );
   const linesRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const el = linesRef.current;
@@ -92,14 +94,14 @@ export default function Reflection() {
 
         <div className="mt-14 flex flex-wrap items-center gap-4">
           <MagneticButton
-            onClick={() => scrollToId("#sources")}
+            onClick={() => router.push("/understand-water")}
             className="u-mono text-[0.78rem] tracking-[0.18em] uppercase"
           >
             <span
               className="inline-flex items-center gap-2 rounded-full px-6 py-3"
               style={{ background: "var(--accent)", color: "var(--bg)" }}
             >
-              Read the sources
+              Understand the water →
             </span>
           </MagneticButton>
           <MagneticButton

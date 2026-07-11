@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import WaterPolicy from "@/components/sections/WaterPolicy";
-import Footer from "@/components/sections/Footer";
+import BackToTop from "@/components/BackToTop";
 
 export const metadata: Metadata = {
   title: "Water Policy — Ontario · Toronto · Canada | Nature: Water × The AI Boom",
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function WaterPolicyPage() {
   return (
     <>
-      <main className="relative z-10">
+      <main className="page-enter tab-theme relative z-10">
         <div className="mx-auto max-w-6xl px-6 pt-28 md:px-10">
           <Link
             href="/"
@@ -23,8 +23,8 @@ export default function WaterPolicyPage() {
           </Link>
         </div>
         <WaterPolicy />
+        <BackToTop />
       </main>
-      <Footer />
     </>
   );
 }

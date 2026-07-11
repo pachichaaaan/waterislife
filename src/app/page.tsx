@@ -5,7 +5,6 @@ import AIChapter from "@/components/sections/AIChapter";
 import DataTheatre from "@/components/sections/DataTheatre";
 import Collision from "@/components/sections/Collision";
 import Reflection from "@/components/sections/Reflection";
-import Footer from "@/components/sections/Footer";
 
 export default function Page() {
   return (
@@ -20,7 +19,6 @@ export default function Page() {
         <Collision />
         <Reflection />
       </main>
-      <Footer />
     </>
   );
 }

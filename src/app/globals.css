@@ -2,33 +2,15 @@
 
 /* ------------------------------------------------------------------ *
  *  THEME ENGINE
- *  Two tuned palettes — cool "Water" and hot "AI cost" — that migrate
- *  together as a single scroll-driven progress value `--t` (0 → 1).
- *  Colours are mixed in oklab so the crossfade stays perceptual, not
- *  muddy. Nothing snaps; everything drifts.
+ *  Two tuned palettes — cool "Water" and hot "AI cost". The live theme
+ *  colours are interpolated in JS (lib/env.ts) and written to :root as
+ *  plain rgb() values; the statics below are the cool defaults for first
+ *  paint. Per-frame scroll drivers (drain / heat) are set on individual
+ *  overlay elements, never on :root, so a scroll frame never invalidates
+ *  the whole tree.
  * ------------------------------------------------------------------ */
 
-@property --t {
-  syntax: "<number>";
-  initial-value: 0;
-  inherits: true;
-}
-@property --depletion {
-  syntax: "<number>";
-  initial-value: 0;
-  inherits: true;
-}
-@property --heat {
-  syntax: "<number>";
-  initial-value: 0;
-  inherits: true;
-}
-
 :root {
-  --t: 0;
-  --depletion: 0;
-  --heat: 0;
-
   /* cool / "Water" */
   --cool-abyss: #03070f;
   --cool-deep: #0a1a2e;
@@ -43,18 +25,18 @@
   --hot-molten: #1e4fe6;
   --hot-ash: #eaf2ff;
 
-  /* derived — these migrate live as --t changes */
-  --bg: color-mix(in oklab, var(--cool-abyss), var(--hot-char) calc(var(--t) * 100%));
-  --panel: color-mix(in oklab, var(--cool-deep), var(--hot-panel) calc(var(--t) * 100%));
-  --accent: color-mix(in oklab, var(--cool-aqua), var(--hot-amber) calc(var(--t) * 100%));
-  --accent-2: color-mix(in oklab, var(--cool-tide), var(--hot-molten) calc(var(--t) * 100%));
-  --text: color-mix(in oklab, var(--cool-foam), var(--hot-ash) calc(var(--t) * 100%));
+  /* live theme colours — cool defaults; setEnv migrates these on scroll */
+  --bg: rgb(3 7 15);
+  --panel: rgb(10 26 46);
+  --accent: rgb(76 224 215);
+  --accent-2: rgb(58 168 255);
+  --text: rgb(234 246 255);
 
-  --muted: color-mix(in oklab, var(--text), transparent 48%);
-  --faint: color-mix(in oklab, var(--text), transparent 74%);
-  --line: color-mix(in oklab, var(--text), transparent 86%);
-  --panel-fill: color-mix(in oklab, var(--panel), transparent 34%);
-  --glow: color-mix(in oklab, var(--accent), transparent 55%);
+  --muted: rgb(234 246 255 / 0.52);
+  --faint: rgb(234 246 255 / 0.26);
+  --line: rgb(234 246 255 / 0.14);
+  --panel-fill: rgb(10 26 46 / 0.66);
+  --glow: rgb(76 224 215 / 0.45);
 }
 
 @theme inline {
@@ -163,24 +145,13 @@ html.lenis body {
  * ------------------------------------------------------------------ */
 .grain {
   position: fixed;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
+  inset: 0;
   pointer-events: none;
   z-index: 90;
   opacity: 0.05;
   mix-blend-mode: overlay;
   background-repeat: repeat;
   background-size: 220px 220px;
-  animation: grain-shift 6s steps(6) infinite;
-}
-@keyframes grain-shift {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-8%, 4%); }
-  40% { transform: translate(6%, -6%); }
-  60% { transform: translate(-4%, 8%); }
-  80% { transform: translate(8%, 2%); }
-  100% { transform: translate(0, 0); }
 }
 
 /* ------------------------------------------------------------------ *
@@ -197,6 +168,125 @@ html.lenis body {
 .clip-media {
   clip-path: inset(0 0 100% 0);
   will-change: clip-path;
+}
+
+/* Elegant page-entrance for the content tabs */
+.page-enter {
+  animation: pageEnter 0.95s cubic-bezier(0.5, 0, 0.2, 1) both;
+}
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.992);
+    filter: blur(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Scroll reveal — content blocks rise + fade + settle as they enter view
+   (driven by IntersectionObserver in useScrollReveal). */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(46px) scale(0.98);
+  transition: opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal-init.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-init {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Card micro-interaction on the content tabs — a soft accent glow on hover.
+   The transition covers the reveal's opacity/transform too (single combined
+   declaration), so it can't override and break the reveal. */
+.tab-theme .rounded-lg {
+  transition:
+    opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.45s ease,
+    box-shadow 0.45s ease;
+}
+.tab-theme .rounded-lg:hover {
+  border-color: color-mix(in oklab, var(--accent), transparent 30%);
+  box-shadow: 0 16px 50px -20px color-mix(in oklab, var(--accent), transparent 52%);
+}
+@media (hover: none) {
+  .tab-theme .rounded-lg:hover {
+    border-color: var(--line);
+    box-shadow: none;
+  }
+}
+
+/* Nav links — an accent underline that wipes in on hover / active */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  height: 1px;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.4s cubic-bezier(0.5, 0, 0.2, 1);
+}
+.nav-link:hover::after,
+.nav-link[data-active="true"]::after {
+  transform: scaleX(1);
+}
+
+/* ------------------------------------------------------------------ *
+ *  CONTENT-TAB THEME
+ *  Uniform water-blue type across all tab pages, with emphasized
+ *  sub-headings. Scoped to .tab-theme so the home page is untouched.
+ * ------------------------------------------------------------------ */
+.tab-theme {
+  --text: rgb(150 210 255);
+  --muted: rgb(150 210 255 / 0.74);
+  --faint: rgb(150 210 255 / 0.46);
+  --accent: rgb(74 176 255);
+  --line: rgb(150 210 255 / 0.2);
+  color: var(--text);
+}
+
+/* emphasized section sub-headings (the mono scope labels) */
+.tab-theme .scope-tag {
+  font-size: clamp(0.82rem, 1.3vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  color: var(--accent);
+}
+.tab-theme .scope-tag::before {
+  content: "";
+  display: inline-block;
+  width: 1.8rem;
+  height: 2px;
+  margin-right: 0.7rem;
+  vertical-align: middle;
+  background: var(--accent);
+}
+
+/* card / item sub-headings pop a little more */
+.tab-theme h3 {
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.tab-theme h2:not(.scope-tag) {
+  color: var(--text);
 }
 
 /* ------------------------------------------------------------------ *
@@ -237,25 +327,6 @@ html.lenis body {
 }
 
 /* ------------------------------------------------------------------ *
- *  CSS "WATER" FALLBACK — used when WebGL is unavailable or motion is
- *  reduced. Still depletes with --depletion so the story survives.
- * ------------------------------------------------------------------ */
-.water-fallback {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(
-      to top,
-      transparent calc((1 - (0.86 - var(--depletion) * 0.66)) * 100%),
-      color-mix(in oklab, var(--accent), var(--bg) 30%) calc((1 - (0.86 - var(--depletion) * 0.66)) * 100%),
-      color-mix(in oklab, var(--accent-2), var(--bg) 55%) 100%
-    );
-  transition: none;
-}
-
-/* ------------------------------------------------------------------ *
  *  REDUCED MOTION — cut smoothing, shimmer, staggers; show finals.
  * ------------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
@@ -269,6 +340,12 @@ html.lenis body {
   }
   .clip-media {
     clip-path: inset(0 0 0 0) !important;
+  }
+  .page-enter {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
   }
   * {
     scroll-behavior: auto !important;

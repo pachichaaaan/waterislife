@@ -31,21 +31,3 @@ export const PROJECTIONS = [
   },
 ];
 
-export const SOURCES = [
-  "Michelle Jadormeo — 2025–26 Geoffrey F. Bruce Fellow in Canadian Freshwater Policy, Toronto Metropolitan University",
-  "Government of Ontario — Permit To Take Water (Ontario Water Resources Act, O. Reg. 387/04)",
-  "UC Riverside — Making AI Less Thirsty (Li, Yang & Islam, arXiv:2304.03271, 2023)",
-  "IEA — Energy and AI / Electricity reports (2024–2026)",
-  "Brookings (2026)",
-  "OECD.AI",
-  "Environmental and Energy Study Institute",
-  "Google 2025 Environmental Report",
-  "Morgan Stanley",
-  "World Resources Institute",
-  "IE Insights",
-  "BGR / ACM",
-  "The Washington Post (2024)",
-];
-
-export const SOURCE_CAVEAT =
-  "Figures are drawn from public estimates and company disclosures; per-query numbers in particular are contested and depend on measurement scope, hardware generation and local grid mix.";

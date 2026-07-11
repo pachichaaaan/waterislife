@@ -169,4 +169,61 @@ export function useClipReveal<T extends HTMLElement = HTMLElement>(opts?: {
   return ref;
 }
 
+/**
+ * Staggered scroll reveal for a set of `[data-reveal]` blocks within a
+ * container. Uses IntersectionObserver + CSS (see `.reveal-init` in
+ * globals.css) rather than GSAP/ScrollTrigger, so it fires reliably on first
+ * paint AND on client-side route changes, with no smooth-scroll timing issues.
+ * Blocks rise + fade + settle as they enter the viewport, lightly staggered.
+ */
+export function useScrollReveal<T extends HTMLElement = HTMLElement>(opts?: {
+  stagger?: number;
+}) {
+  const ref = useRef<T | null>(null);
+  const { stagger = 0.08 } = opts ?? {};
+
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+    const items = Array.from(root.querySelectorAll<HTMLElement>("[data-reveal]"));
+    if (!items.length) return;
+
+    if (prefersReducedMotion()) return; // leave everything visible
+
+    items.forEach((el) => el.classList.add("reveal-init"));
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          io.unobserve(el);
+          el.classList.add("reveal-in");
+          // drop the stagger delay once revealed so later hovers feel instant
+          window.setTimeout(() => {
+            el.style.transitionDelay = "";
+          }, 1500);
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -7% 0px" }
+    );
+
+    items.forEach((el, i) => {
+      el.style.transitionDelay = `${(i % 5) * stagger}s`;
+      io.observe(el);
+    });
+
+    return () => {
+      io.disconnect();
+      items.forEach((el) => {
+        el.classList.remove("reveal-init", "reveal-in");
+        el.style.transitionDelay = "";
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return ref;
+}
+
 export { ScrollTrigger };
