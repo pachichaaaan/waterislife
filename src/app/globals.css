@@ -1,26 +1,276 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ *
+ *  THEME ENGINE
+ *  Two tuned palettes — cool "Water" and hot "AI cost" — that migrate
+ *  together as a single scroll-driven progress value `--t` (0 → 1).
+ *  Colours are mixed in oklab so the crossfade stays perceptual, not
+ *  muddy. Nothing snaps; everything drifts.
+ * ------------------------------------------------------------------ */
+
+@property --t {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: true;
+}
+@property --depletion {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: true;
+}
+@property --heat {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: true;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --t: 0;
+  --depletion: 0;
+  --heat: 0;
+
+  /* cool / "Water" */
+  --cool-abyss: #03070f;
+  --cool-deep: #0a1a2e;
+  --cool-aqua: #4ce0d7;
+  --cool-tide: #3aa8ff;
+  --cool-foam: #eaf6ff;
+
+  /* hot / "AI cost" */
+  --hot-char: #0a0604;
+  --hot-panel: #1a0e06;
+  --hot-amber: #ff7a18;
+  --hot-molten: #ff3b2f;
+  --hot-ash: #fff3e6;
+
+  /* derived — these migrate live as --t changes */
+  --bg: color-mix(in oklab, var(--cool-abyss), var(--hot-char) calc(var(--t) * 100%));
+  --panel: color-mix(in oklab, var(--cool-deep), var(--hot-panel) calc(var(--t) * 100%));
+  --accent: color-mix(in oklab, var(--cool-aqua), var(--hot-amber) calc(var(--t) * 100%));
+  --accent-2: color-mix(in oklab, var(--cool-tide), var(--hot-molten) calc(var(--t) * 100%));
+  --text: color-mix(in oklab, var(--cool-foam), var(--hot-ash) calc(var(--t) * 100%));
+
+  --muted: color-mix(in oklab, var(--text), transparent 48%);
+  --faint: color-mix(in oklab, var(--text), transparent 74%);
+  --line: color-mix(in oklab, var(--text), transparent 86%);
+  --panel-fill: color-mix(in oklab, var(--panel), transparent 34%);
+  --glow: color-mix(in oklab, var(--accent), transparent 55%);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-poppins);
+  --font-mono: var(--font-plex-mono);
+  --color-bg: var(--bg);
+  --color-text: var(--text);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  scroll-behavior: auto; /* Lenis owns smoothing */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-poppins), "Segoe UI", system-ui, sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+  cursor: none; /* replaced by custom cursor; restored on touch */
+}
+
+/* Devices without a fine pointer keep the native cursor */
+@media (hover: none), (pointer: coarse) {
+  body {
+    cursor: auto;
+  }
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* Hide the scrollbar chrome but keep scrollability */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+html {
+  scrollbar-width: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Lenis smooth-scroll plumbing */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ------------------------------------------------------------------ *
+ *  TYPE
+ * ------------------------------------------------------------------ */
+.u-mono {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-feature-settings: "tnum" 1;
+}
+.u-display {
+  font-family: var(--font-poppins), sans-serif;
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+}
+
+/* Scope tags — instrument-panel authority */
+.scope-tag {
+  font-family: var(--font-plex-mono), monospace;
+  font-size: clamp(0.7rem, 1vw, 0.82rem);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ *
+ *  FILM GRAIN — subtle animated turbulence over the whole page
+ * ------------------------------------------------------------------ */
+.grain {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 90;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-repeat: repeat;
+  background-size: 220px 220px;
+  animation: grain-shift 6s steps(6) infinite;
+}
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-8%, 4%); }
+  40% { transform: translate(6%, -6%); }
+  60% { transform: translate(-4%, 8%); }
+  80% { transform: translate(8%, 2%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ------------------------------------------------------------------ *
+ *  REVEAL PRIMITIVES
+ * ------------------------------------------------------------------ */
+.reveal-mask {
+  overflow: hidden;
+}
+.split-line,
+.split-char {
+  display: inline-block;
+  will-change: transform;
+}
+.clip-media {
+  clip-path: inset(0 0 100% 0);
+  will-change: clip-path;
+}
+
+/* ------------------------------------------------------------------ *
+ *  CUSTOM CURSOR
+ * ------------------------------------------------------------------ */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 100;
+  border-radius: 999px;
+  transform: translate3d(-50%, -50%, 0);
+  mix-blend-mode: difference;
+}
+.cursor-dot {
+  width: 7px;
+  height: 7px;
+  background: #fff;
+}
+.cursor-ring {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #fff;
+  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+}
+.cursor-ring[data-active="true"] {
+  width: 68px;
+  height: 68px;
+  background: rgba(255, 255, 255, 0.12);
+}
+@media (hover: none), (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ *  CSS "WATER" FALLBACK — used when WebGL is unavailable or motion is
+ *  reduced. Still depletes with --depletion so the story survives.
+ * ------------------------------------------------------------------ */
+.water-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to top,
+      transparent calc((1 - (0.86 - var(--depletion) * 0.66)) * 100%),
+      color-mix(in oklab, var(--accent), var(--bg) 30%) calc((1 - (0.86 - var(--depletion) * 0.66)) * 100%),
+      color-mix(in oklab, var(--accent-2), var(--bg) 55%) 100%
+    );
+  transition: none;
+}
+
+/* ------------------------------------------------------------------ *
+ *  REDUCED MOTION — cut smoothing, shimmer, staggers; show finals.
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .grain {
+    animation: none;
+  }
+  .split-line,
+  .split-char {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .clip-media {
+    clip-path: inset(0 0 0 0) !important;
+  }
+  * {
+    scroll-behavior: auto !important;
+  }
 }
