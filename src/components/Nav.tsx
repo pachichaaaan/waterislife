@@ -10,6 +10,7 @@ const LINKS: { label: string; id: string }[] = [
   { label: "The boom", id: "#chapter" },
   { label: "Data", id: "#data" },
   { label: "Collision", id: "#collision" },
+  { label: "Water Policy", id: "#policy" },
 ];
 
 export default function Nav({ ready }: { ready: boolean }) {

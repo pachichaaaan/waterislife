@@ -5,6 +5,7 @@ import Turn from "@/components/sections/Turn";
 import AIChapter from "@/components/sections/AIChapter";
 import DataTheatre from "@/components/sections/DataTheatre";
 import Collision from "@/components/sections/Collision";
+import WaterPolicy from "@/components/sections/WaterPolicy";
 import Reflection from "@/components/sections/Reflection";
 import Footer from "@/components/sections/Footer";
 
@@ -19,6 +20,7 @@ export default function Page() {
         <AIChapter />
         <DataTheatre />
         <Collision />
+        <WaterPolicy />
         <Reflection />
       </main>
       <Footer />

@@ -32,6 +32,8 @@ export const PROJECTIONS = [
 ];
 
 export const SOURCES = [
+  "Michelle Jadormeo — 2025–26 Geoffrey F. Bruce Fellow in Canadian Freshwater Policy, Toronto Metropolitan University",
+  "Government of Ontario — Permit To Take Water (Ontario Water Resources Act, O. Reg. 387/04)",
   "UC Riverside — Making AI Less Thirsty (Li, Yang & Islam, arXiv:2304.03271, 2023)",
   "IEA — Energy and AI / Electricity reports (2024–2026)",
   "Brookings (2026)",
