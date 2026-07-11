@@ -1,20 +1,24 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { scrollToId } from "@/lib/env";
 import MagneticButton from "./MagneticButton";
 
-const LINKS: { label: string; id: string }[] = [
+const SECTION_LINKS: { label: string; id: string }[] = [
   { label: "Source", id: "#hero" },
   { label: "The turn", id: "#turn" },
   { label: "The boom", id: "#chapter" },
   { label: "Data", id: "#data" },
   { label: "Collision", id: "#collision" },
-  { label: "Water Policy", id: "#policy" },
 ];
 
 export default function Nav({ ready }: { ready: boolean }) {
   const barRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const router = useRouter();
+  const onHome = pathname === "/";
+  const policyActive = pathname === "/water-policy";
 
   useEffect(() => {
     const bar = barRef.current;
@@ -37,6 +41,16 @@ export default function Nav({ ready }: { ready: boolean }) {
     };
   }, []);
 
+  // Section links live on the home page; from elsewhere, return home first.
+  const goSection = (id: string) => {
+    if (onHome) scrollToId(id);
+    else router.push("/");
+  };
+  const goHome = () => {
+    if (onHome) scrollToId("#top");
+    else router.push("/");
+  };
+
   return (
     <header
       className="fixed inset-x-0 top-0 z-[80] transition-[opacity,transform] duration-1000"
@@ -55,7 +69,7 @@ export default function Nav({ ready }: { ready: boolean }) {
         {/* logo-mark: a droplet that reads as a flame when hot */}
         <MagneticButton
           as="button"
-          onClick={() => scrollToId("#top")}
+          onClick={goHome}
           className="flex items-center gap-2.5"
           ariaLabel="Back to the source"
           radius={70}
@@ -75,10 +89,10 @@ export default function Nav({ ready }: { ready: boolean }) {
         </MagneticButton>
 
         <nav aria-label="Sections" className="hidden items-center gap-6 md:flex">
-          {LINKS.map((l) => (
+          {SECTION_LINKS.map((l) => (
             <button
               key={l.id}
-              onClick={() => scrollToId(l.id)}
+              onClick={() => goSection(l.id)}
               className="u-mono text-[0.7rem] tracking-[0.18em] uppercase transition-colors"
               style={{ color: "var(--muted)" }}
               onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
@@ -87,6 +101,19 @@ export default function Nav({ ready }: { ready: boolean }) {
               {l.label}
             </button>
           ))}
+          {/* Water Policy — its own page/tab */}
+          <button
+            onClick={() => router.push("/water-policy")}
+            aria-current={policyActive ? "page" : undefined}
+            className="u-mono text-[0.7rem] tracking-[0.18em] uppercase transition-colors"
+            style={{ color: policyActive ? "var(--accent)" : "var(--muted)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = policyActive ? "var(--accent)" : "var(--muted)")
+            }
+          >
+            Water Policy
+          </button>
         </nav>
 
         <MagneticButton

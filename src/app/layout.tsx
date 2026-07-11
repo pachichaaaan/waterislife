@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+import Providers from "@/components/Providers";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,7 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${poppins.variable} ${plexMono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

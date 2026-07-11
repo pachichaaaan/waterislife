@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger, ensureGsap } from "@/lib/anim";
 import { env, isTouch, prefersReducedMotion, setEnv, setLenis } from "@/lib/env";
@@ -15,6 +16,7 @@ const GRAIN =
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const lenisRef = useRef<Lenis | null>(null);
+  const pathname = usePathname();
 
   // --- smooth scroll + scrolltrigger sync + pointer tracking ---
   useEffect(() => {
@@ -68,6 +70,20 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       setLenis(null);
     };
   }, []);
+
+  // --- palette baseline per route ---
+  // The home page's scroll schedule owns the palette there; the Water Policy
+  // page has no schedule, so we set a fixed state (the deep-blue "cost" look
+  // the section was designed in) and reset to cool when returning home.
+  useEffect(() => {
+    if (pathname === "/water-policy") {
+      setEnv({ theme: 1, depletion: 0.88, heat: 0.72 });
+    } else {
+      setEnv({ theme: 0, depletion: 0, heat: 0 });
+    }
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  }, [pathname]);
 
   // --- lock scroll until the preloader curtain lifts ---
   useEffect(() => {
