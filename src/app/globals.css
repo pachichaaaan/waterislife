@@ -36,12 +36,12 @@
   --cool-tide: #3aa8ff;
   --cool-foam: #eaf6ff;
 
-  /* hot / "AI cost" */
-  --hot-char: #0a0604;
-  --hot-panel: #1a0e06;
-  --hot-amber: #ff7a18;
-  --hot-molten: #ff3b2f;
-  --hot-ash: #fff3e6;
+  /* "AI cost" side — deep, cold electric blue (var names kept for continuity) */
+  --hot-char: #040a1e;
+  --hot-panel: #0b1e3d;
+  --hot-amber: #3b82f6;
+  --hot-molten: #1e4fe6;
+  --hot-ash: #eaf2ff;
 
   /* derived — these migrate live as --t changes */
   --bg: color-mix(in oklab, var(--cool-abyss), var(--hot-char) calc(var(--t) * 100%));

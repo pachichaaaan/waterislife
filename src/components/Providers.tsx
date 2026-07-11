@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger, ensureGsap } from "@/lib/anim";
 import { env, isTouch, prefersReducedMotion, setEnv, setLenis } from "@/lib/env";
-import WaterCanvas from "./webgl/WaterCanvas";
+import WavesBackground from "./WavesBackground";
 import Cursor from "./Cursor";
 import Nav from "./Nav";
 import Preloader from "./Preloader";
@@ -90,7 +90,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <WaterCanvas />
+      <WavesBackground />
       <div className="grain" style={{ backgroundImage: GRAIN }} aria-hidden="true" />
       {children}
       <Nav ready={ready} />
