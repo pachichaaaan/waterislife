@@ -39,7 +39,7 @@ function LogoMark() {
       ref={ref}
       src="/canada-water-logo.jpg"
       alt="Canada Water"
-      className="h-8 w-8 object-contain md:h-9 md:w-9"
+      className="h-8 w-8 rounded-full object-cover md:h-9 md:w-9"
       onError={() => setFailed(true)}
     />
   );
