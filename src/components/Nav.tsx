@@ -37,7 +37,7 @@ function LogoMark() {
     // eslint-disable-next-line @next/next/no-img-element
     <img
       ref={ref}
-      src="/canada-water-logo.png"
+      src="/canada-water-logo.jpg"
       alt="Canada Water"
       className="h-8 w-8 object-contain md:h-9 md:w-9"
       onError={() => setFailed(true)}
