@@ -75,11 +75,18 @@ export function useSplitReveal<T extends HTMLElement = HTMLElement>(opts?: {
 
       if (waitForReady) {
         gsap.set(targets, { yPercent: 115, opacity: 0 });
-        if (env.ready) {
+        let done = false;
+        const playOnce = () => {
+          if (done) return;
+          done = true;
           play();
+        };
+        if (env.ready) {
+          playOnce();
         } else {
-          const onReady = () => play();
-          window.addEventListener("water:ready", onReady, { once: true });
+          window.addEventListener("water:ready", playOnce, { once: true });
+          // failsafe: reveal even if the ready event is somehow missed
+          window.setTimeout(playOnce, 6500);
         }
       } else {
         gsap.from(targets, {
