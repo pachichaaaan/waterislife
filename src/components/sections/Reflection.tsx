@@ -45,7 +45,7 @@ export default function Reflection() {
       ref={sectionRef}
       id="reflection"
       aria-label="Reflection — the question"
-      className="relative z-10 flex min-h-screen flex-col justify-center px-6 py-[16vh] md:px-10"
+      className="relative z-10 flex min-h-[100svh] flex-col justify-center px-6 py-[16vh] md:px-10"
     >
       <div className="mx-auto w-full max-w-5xl">
         <span className="scope-tag mb-8 block">REFLECTION</span>

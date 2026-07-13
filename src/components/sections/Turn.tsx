@@ -52,7 +52,7 @@ export default function Turn() {
     <section ref={sectionRef} id="turn" aria-label="The turn" className="relative z-10">
       <div
         ref={pinRef}
-        className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center md:px-10"
+        className="relative flex min-h-[100svh] flex-col items-center justify-center px-6 text-center md:px-10"
       >
         <span className="scope-tag mb-10">THE TURN</span>
         <div ref={linesRef} className="u-display" style={{ lineHeight: 0.98 }}>

@@ -58,7 +58,7 @@ export default function AIChapter() {
       ref={sectionRef}
       id="chapter"
       aria-label="The AI boom — at what environmental cost?"
-      className="relative z-10 flex min-h-screen flex-col justify-center px-6 py-[14vh] md:px-10"
+      className="relative z-10 flex min-h-[100svh] flex-col justify-center px-6 py-[14vh] md:px-10"
     >
       <div className="mx-auto w-full max-w-6xl">
         <h2

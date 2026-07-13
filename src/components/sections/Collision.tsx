@@ -46,10 +46,10 @@ export default function Collision() {
   }, []);
 
   return (
-    <section id="collision" ref={rootRef} aria-label="Water and compute — the collision" className="relative z-10 min-h-screen overflow-hidden">
-      <div className="grid min-h-screen grid-cols-1 md:grid-cols-2">
-        {/* WATER side */}
-        <div className="relative flex items-end overflow-hidden p-8 md:p-12">
+    <section id="collision" ref={rootRef} aria-label="Water and compute — the collision" className="relative z-10 min-h-[100svh] overflow-hidden">
+      <div className="grid min-h-[100svh] grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1">
+        {/* WATER side — top on mobile, left on desktop */}
+        <div className="relative flex items-start overflow-hidden p-8 md:items-end md:p-12">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"
@@ -74,8 +74,8 @@ export default function Collision() {
           </span>
         </div>
 
-        {/* MACHINE side */}
-        <div className="relative flex items-start justify-end overflow-hidden p-8 md:p-12">
+        {/* MACHINE side — bottom on mobile, right on desktop */}
+        <div className="relative flex items-end justify-end overflow-hidden p-8 md:items-start md:p-12">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"
