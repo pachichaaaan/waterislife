@@ -64,9 +64,9 @@ export function useSplitReveal<T extends HTMLElement = HTMLElement>(opts?: {
       gsap.set(el, { opacity: 1 });
 
       const play = () =>
-        gsap.from(targets, {
-          yPercent: 115,
-          opacity: 0,
+        gsap.to(targets, {
+          yPercent: 0,
+          opacity: 1,
           duration: D_REVEAL,
           ease: EASE,
           delay,
