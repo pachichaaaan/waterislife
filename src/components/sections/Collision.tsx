@@ -75,7 +75,7 @@ export default function Collision() {
         </div>
 
         {/* MACHINE side — bottom on mobile, right on desktop */}
-        <div className="relative flex items-end justify-end overflow-hidden p-8 md:items-start md:p-12">
+        <div className="relative flex items-end justify-end overflow-hidden p-8 md:items-start md:p-12 md:pt-28">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"
