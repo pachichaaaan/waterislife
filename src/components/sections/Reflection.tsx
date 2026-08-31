@@ -92,7 +92,7 @@ export default function Reflection() {
           The arithmetic is contested; the thirst is not.
         </p>
 
-        <div className="mt-14 flex flex-wrap items-center gap-4">
+        <div className="mt-14 flex flex-wrap items-center gap-8">
           <MagneticButton
             onClick={() => router.push("/understand-water")}
             className="u-mono text-[0.78rem] tracking-[0.18em] uppercase"

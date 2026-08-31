@@ -42,8 +42,13 @@ export default function MagneticButton({
       const dy = e.clientY - cy;
       const dist = Math.hypot(dx, dy);
       if (dist < radius + Math.max(r.width, r.height) / 2) {
-        gsap.to(el, { x: dx * strength, y: dy * strength, duration: 0.5, ease: "power3.out" });
-        gsap.to(inner, { x: dx * strength * 0.5, y: dy * strength * 0.5, duration: 0.5, ease: "power3.out" });
+        // Cap the pull so two adjacent magnetic buttons can never travel far
+        // enough toward each other's cursor to collide/overlap.
+        const max = 8;
+        const mx = gsap.utils.clamp(-max, max, dx * strength);
+        const my = gsap.utils.clamp(-max, max, dy * strength);
+        gsap.to(el, { x: mx, y: my, duration: 0.5, ease: "power3.out" });
+        gsap.to(inner, { x: mx * 0.5, y: my * 0.5, duration: 0.5, ease: "power3.out" });
       }
     };
     const reset = () => {
