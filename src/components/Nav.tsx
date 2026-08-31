@@ -96,6 +96,8 @@ export default function Nav({ ready }: { ready: boolean }) {
         style={{
           background: "color-mix(in oklab, var(--bg), transparent 8%)",
           borderBottom: "1px solid var(--line)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
         }}
       >
         {/* logo-mark */}
