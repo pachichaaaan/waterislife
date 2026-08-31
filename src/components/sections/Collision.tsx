@@ -49,7 +49,7 @@ export default function Collision() {
     <section id="collision" ref={rootRef} aria-label="Water and compute — the collision" className="relative z-10 min-h-[100svh] overflow-hidden">
       <div className="grid min-h-[100svh] grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1">
         {/* WATER side — top on mobile, left on desktop */}
-        <div className="relative flex items-start overflow-hidden p-8 md:items-end md:p-12">
+        <div className="@container relative flex items-start overflow-hidden p-8 md:items-end md:p-12">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"
@@ -68,14 +68,14 @@ export default function Collision() {
           />
           <span
             className="u-display relative"
-            style={{ fontSize: "clamp(3rem, 12vw, 9rem)", color: "var(--cool-foam)", lineHeight: 0.9 }}
+            style={{ fontSize: "clamp(3rem, 18cqw, 9rem)", color: "var(--cool-foam)", lineHeight: 0.9 }}
           >
             WATER
           </span>
         </div>
 
         {/* MACHINE side — bottom on mobile, right on desktop */}
-        <div className="relative flex items-end justify-end overflow-hidden p-8 md:items-start md:p-12 md:pt-28">
+        <div className="@container relative flex items-end justify-end overflow-hidden p-8 md:items-start md:p-12 md:pt-28">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"
@@ -101,7 +101,7 @@ export default function Collision() {
           </div>
           <span
             className="u-display relative text-right"
-            style={{ fontSize: "clamp(3rem, 12vw, 9rem)", color: "var(--hot-ash)", lineHeight: 0.9 }}
+            style={{ fontSize: "clamp(3rem, 18cqw, 9rem)", color: "var(--hot-ash)", lineHeight: 0.9 }}
           >
             COMPUTE
           </span>
