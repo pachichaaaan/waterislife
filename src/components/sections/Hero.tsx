@@ -76,9 +76,9 @@ export default function Hero() {
           className="mt-8 max-w-xl text-base leading-relaxed md:text-lg"
           style={{ color: "var(--muted)" }}
         >
-          Four billion years in motion — the one substance every living thing is
-          built to want, borrowed and returned and never used up. Until now, the
-          asking was only ours.
+          Four billion years in motion — the one substance every living thing
+          depends on. Borrowed, returned, and never truly used up. Until now,
+          the asking was ours alone.
         </p>
       </div>
 
