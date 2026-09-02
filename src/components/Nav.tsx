@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { scrollToId } from "@/lib/env";
@@ -34,11 +35,13 @@ function LogoMark() {
   }, []);
   if (failed) return DROPLET;
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <Image
       ref={ref}
       src="/canada-water-logo.jpg"
       alt="Canada Water"
+      width={36}
+      height={36}
+      priority
       className="h-8 w-8 rounded-full object-cover md:h-9 md:w-9"
       onError={() => setFailed(true)}
     />

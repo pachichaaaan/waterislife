@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { useScrollReveal, useSplitReveal } from "@/lib/useReveal";
 import {
   ACHIEVEMENTS,
@@ -35,12 +36,14 @@ function Photo() {
           </span>
         </div>
       ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           ref={imgRef}
           src={AUTHOR_PHOTO}
           alt={`Portrait of ${AUTHOR_NAME}`}
-          className="h-full w-full object-cover"
+          fill
+          sizes="(min-width: 768px) 40vw, 90vw"
+          className="object-cover"
+          priority
           onError={() => setFailed(true)}
         />
       )}
