@@ -290,6 +290,92 @@ html.lenis body {
 }
 
 /* ------------------------------------------------------------------ *
+ *  ATTENDANCE CHECK-IN FORM (/attendance)
+ * ------------------------------------------------------------------ */
+.checkin-panel {
+  --danger: rgb(255 150 140);
+  border: 1px solid var(--line);
+  background: color-mix(in oklab, var(--panel-fill), black 18%);
+  backdrop-filter: blur(10px);
+}
+.checkin-form input[type="text"],
+.checkin-form input[type="email"],
+.checkin-form select,
+.checkin-form textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 0.8rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgb(3 7 15 / 0.55);
+  color: rgb(234 246 255);
+  font: inherit;
+  font-size: 1rem; /* 16px keeps iOS from zooming on focus */
+  line-height: 1.4;
+  cursor: text;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.checkin-form select {
+  cursor: pointer;
+  color-scheme: dark;
+}
+.checkin-form textarea {
+  resize: vertical;
+}
+.checkin-form ::placeholder {
+  color: var(--faint);
+}
+.checkin-form input:focus,
+.checkin-form select:focus,
+.checkin-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent), transparent 72%);
+}
+.checkin-form [data-invalid="true"] input,
+.checkin-form [data-invalid="true"] select,
+.checkin-form [data-invalid="true"] textarea {
+  border-color: var(--danger);
+}
+.checkin-form input[type="checkbox"] {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.2rem;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.checkin-error {
+  color: var(--danger);
+}
+.checkin-alert {
+  border: 1px solid color-mix(in oklab, var(--danger), transparent 55%);
+  background: color-mix(in oklab, var(--danger), transparent 90%);
+  color: var(--danger);
+}
+.checkin-submit {
+  background: var(--accent);
+  color: rgb(3 7 15);
+  font-weight: 600;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+}
+.checkin-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 36px -14px color-mix(in oklab, var(--accent), transparent 30%);
+}
+.checkin-submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.checkin-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------ *
  *  CUSTOM CURSOR
  * ------------------------------------------------------------------ */
 .cursor-dot,
